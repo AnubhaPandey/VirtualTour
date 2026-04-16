@@ -515,18 +515,17 @@ function FloorMapHotspot({ area, onClick }: { area: FloorMapArea; onClick: () =>
   )
 }
 
-function PDFViewer({ onClose }: { onClose: () => void }) {
+function PDFViewer({ onStartOver }: { onStartOver: () => void }) {
   return (
-    <div className="absolute inset-0 bg-black/95 flex flex-col z-60 animate-in fade-in duration-300">
+    <div className="absolute inset-0 bg-black/95 flex flex-col z-[60] animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-black/50 border-b border-white/10">
         <h2 className="text-xl font-bold text-white">MetaClaw</h2>
         <button
-          onClick={onClose}
-          className="flex items-center gap-2 bg-black/70 backdrop-blur-sm text-white px-5 py-3 rounded-full font-medium hover:bg-black/80 transition-all hover:scale-105 shadow-lg border border-white/20"
+          onClick={onStartOver}
+          className="flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-full font-medium hover:bg-primary/90 transition-all hover:scale-105 shadow-lg"
         >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Meeting Room
+          Start Over
         </button>
       </div>
       
@@ -663,7 +662,18 @@ export function Office3DScene() {
       )}
 
       {/* PDF Viewer */}
-      {showPDF && <PDFViewer onClose={() => setShowPDF(false)} />}
+      {showPDF && (
+        <PDFViewer 
+          onStartOver={() => {
+            setShowPDF(false)
+            setIsTransitioning(true)
+            setTimeout(() => {
+              setCurrentScene("entrance")
+              setIsTransitioning(false)
+            }, 300)
+          }} 
+        />
+      )}
 
       {/* Back Button in Meeting Room */}
       {currentScene === "meetingRoom" && !showSuccess && (
