@@ -492,7 +492,7 @@ function PDFViewer({ onClose }: { onClose: () => void }) {
       {/* PDF Container */}
       <div className="flex-1 w-full">
         <iframe
-          src="https://blobs.vusercontent.net/blob/MetaClaw-mr5mVP3InmQnI31gA0PKpYPhcwcHtE.pdf"
+          src="https://blobs.vusercontent.net/blob/MetaClaw-cQiycbgP2SVvOaXYlJgvQ6ltt9Ovz1.pdf"
           className="w-full h-full"
           title="MetaClaw PDF"
         />
