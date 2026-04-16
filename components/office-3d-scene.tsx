@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { ArrowLeft, Map } from "lucide-react"
+import { ArrowLeft, Map, RotateCcw } from "lucide-react"
 
 type Scene = "entrance" | "lobby" | "meetingRoom"
 
@@ -338,7 +338,7 @@ function FloorMapButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="absolute top-6 right-6 z-20 flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
+      className="flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
     >
       <Map className="w-4 h-4" />
       Floor Map
@@ -346,14 +346,28 @@ function FloorMapButton({ onClick }: { onClick: () => void }) {
   )
 }
 
+function StartOverButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
+    >
+      <RotateCcw className="w-4 h-4" />
+      Start Over
+    </button>
+  )
+}
+
 function FloorMapOverlay({ 
   onClose, 
   onSunClick, 
-  onAreaClick 
+  onAreaClick,
+  onStartOver,
 }: { 
   onClose: () => void; 
   onSunClick: () => void;
   onAreaClick: (area: FloorMapArea) => void;
+  onStartOver: () => void;
 }) {
   return (
     <div className="absolute inset-0 bg-black flex items-center justify-center z-50 animate-in fade-in duration-300">
@@ -365,6 +379,11 @@ function FloorMapOverlay({
         <ArrowLeft className="w-4 h-4" />
         Back to Lobby
       </button>
+
+      {/* Start Over Button */}
+      <div className="absolute top-6 right-6 z-10">
+        <StartOverButton onClick={onStartOver} />
+      </div>
       
       {/* Full Page Image Container */}
       <div className="relative w-full h-full">
@@ -549,6 +568,16 @@ export function Office3DScene() {
     }, 300)
   }
 
+  const handleGoToEntrance = () => {
+    setShowFloorMap(false)
+    setShowPDF(false)
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setCurrentScene("entrance")
+      setIsTransitioning(false)
+    }, 300)
+  }
+
   return (
     <div className="relative w-full h-screen bg-background overflow-hidden">
       {/* Header */}
@@ -595,9 +624,12 @@ export function Office3DScene() {
       {/* Info Box at Lobby */}
       {currentScene === "lobby" && <LobbyInfoBox />}
 
-      {/* Floor Map Button in Lobby and Meeting Room */}
+      {/* Floor Map + Start Over Buttons in Lobby and Meeting Room */}
       {(currentScene === "lobby" || currentScene === "meetingRoom") && !showFloorMap && !showPDF && (
-        <FloorMapButton onClick={() => setShowFloorMap(true)} />
+        <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
+          <FloorMapButton onClick={() => setShowFloorMap(true)} />
+          <StartOverButton onClick={handleGoToEntrance} />
+        </div>
       )}
 
       {/* Floor Map Overlay */}
@@ -611,6 +643,7 @@ export function Office3DScene() {
               setIsTransitioning(false)
             }, 300)
           }}
+          onStartOver={handleGoToEntrance}
           onSunClick={() => {
             setShowFloorMap(false)
             setIsTransitioning(true)
