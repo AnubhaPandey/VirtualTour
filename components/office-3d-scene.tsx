@@ -285,39 +285,91 @@ function FloorMapButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="absolute top-24 right-8 z-20 flex flex-col items-center gap-2 bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-xl font-medium hover:bg-black/80 transition-all hover:scale-105 shadow-lg border border-white/20"
+      className="absolute top-6 right-48 z-20 flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
     >
-      <Map className="w-8 h-8" />
-      <span className="text-xs">Floor Map</span>
+      <Map className="w-4 h-4" />
+      Floor Map
     </button>
   )
 }
 
-function FloorMapOverlay({ onClose }: { onClose: () => void }) {
+function FloorMapOverlay({ onClose, onSunClick }: { onClose: () => void; onSunClick: () => void }) {
   return (
-    <div className="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center z-50 animate-in fade-in duration-300">
-      <div className="relative w-full h-full flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 bg-black/50">
-          <h2 className="text-2xl font-bold text-white">AI Garage Showcase - Floor Map</h2>
-          <button
-            onClick={onClose}
-            className="flex items-center gap-2 bg-card/90 backdrop-blur-sm text-card-foreground px-5 py-3 rounded-full font-medium hover:bg-card transition-all hover:scale-105 shadow-lg border border-border"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Lobby
-          </button>
-        </div>
+    <div className="absolute inset-0 bg-black flex items-center justify-center z-50 animate-in fade-in duration-300">
+      {/* Back Button */}
+      <button
+        onClick={onClose}
+        className="absolute top-6 left-6 z-10 flex items-center gap-2 bg-black/70 backdrop-blur-sm text-white px-5 py-3 rounded-full font-medium hover:bg-black/80 transition-all hover:scale-105 shadow-lg border border-white/20"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back to Lobby
+      </button>
+      
+      {/* Full Page Image Container */}
+      <div className="relative w-full h-full">
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Watercycle-2mUCL1ASCy0vmhMIRaAtk5fxuLtHwM.jpg"
+          alt="AI Garage Showcase - Water Cycle Floor Map"
+          className="w-full h-full object-cover"
+          crossOrigin="anonymous"
+        />
         
-        {/* Image Container */}
-        <div className="flex-1 flex items-center justify-center p-4">
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Watercycle-2mUCL1ASCy0vmhMIRaAtk5fxuLtHwM.jpg"
-            alt="AI Garage Showcase - Water Cycle Floor Map"
-            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-            crossOrigin="anonymous"
-          />
+        {/* Clickable Sun Area - positioned over the Sun in the image */}
+        <div
+          onClick={onSunClick}
+          className="absolute cursor-pointer group"
+          style={{
+            left: "3%",
+            top: "12%",
+            width: "18%",
+            height: "28%",
+          }}
+        >
+          {/* Hover effect */}
+          <div className="w-full h-full rounded-full transition-all duration-300 group-hover:bg-yellow-400/20 group-hover:border-2 group-hover:border-yellow-400 group-hover:shadow-lg group-hover:shadow-yellow-400/30" />
+          
+          {/* Pulsing indicator */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            <div className="relative">
+              <div className="w-4 h-4 bg-yellow-400 rounded-full animate-ping absolute inset-0 opacity-75" />
+              <div className="w-4 h-4 bg-yellow-400 rounded-full relative z-10" />
+            </div>
+          </div>
+          
+          {/* Tooltip */}
+          <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span className="bg-black/80 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg shadow-lg border border-white/20 text-xs font-medium whitespace-nowrap">
+              Click to view details
+            </span>
+          </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function PDFViewer({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="absolute inset-0 bg-black/95 flex flex-col z-60 animate-in fade-in duration-300">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 bg-black/50 border-b border-white/10">
+        <h2 className="text-xl font-bold text-white">Sun - Overall Team</h2>
+        <button
+          onClick={onClose}
+          className="flex items-center gap-2 bg-black/70 backdrop-blur-sm text-white px-5 py-3 rounded-full font-medium hover:bg-black/80 transition-all hover:scale-105 shadow-lg border border-white/20"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Floor Map
+        </button>
+      </div>
+      
+      {/* PDF Container */}
+      <div className="flex-1 w-full">
+        <iframe
+          src="https://blobs.vusercontent.net/blob/MetaClaw-mr5mVP3InmQnI31gA0PKpYPhcwcHtE.pdf"
+          className="w-full h-full"
+          title="MetaClaw PDF"
+        />
       </div>
     </div>
   )
@@ -329,6 +381,7 @@ export function Office3DScene() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [showFloorMap, setShowFloorMap] = useState(false)
+  const [showPDF, setShowPDF] = useState(false)
 
   const scene = scenes[currentScene]
 
@@ -419,7 +472,15 @@ export function Office3DScene() {
       )}
 
       {/* Floor Map Overlay */}
-      {showFloorMap && <FloorMapOverlay onClose={() => setShowFloorMap(false)} />}
+      {showFloorMap && !showPDF && (
+        <FloorMapOverlay 
+          onClose={() => setShowFloorMap(false)} 
+          onSunClick={() => setShowPDF(true)}
+        />
+      )}
+
+      {/* PDF Viewer */}
+      {showPDF && <PDFViewer onClose={() => setShowPDF(false)} />}
 
       {/* Back Button in Meeting Room */}
       {currentScene === "meetingRoom" && !showSuccess && (
