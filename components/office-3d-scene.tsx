@@ -6,6 +6,59 @@ import { ArrowLeft, Map } from "lucide-react"
 
 type Scene = "entrance" | "lobby" | "meetingRoom"
 
+type FloorMapArea = {
+  id: string
+  label: string
+  subtitle: string
+  position: { left: string; top: string; width: string; height: string }
+  color: string
+}
+
+const floorMapAreas: FloorMapArea[] = [
+  {
+    id: "clouds",
+    label: "Clouds",
+    subtitle: "Products under development",
+    position: { left: "33%", top: "22%", width: "16%", height: "14%" },
+    color: "bg-gray-400",
+  },
+  {
+    id: "thunderstorms",
+    label: "Thunderstorms",
+    subtitle: "Hackathons",
+    position: { left: "58%", top: "18%", width: "18%", height: "16%" },
+    color: "bg-purple-500",
+  },
+  {
+    id: "wind",
+    label: "Wind",
+    subtitle: "Event and Outreach",
+    position: { left: "8%", top: "42%", width: "18%", height: "14%" },
+    color: "bg-teal-400",
+  },
+  {
+    id: "rain",
+    label: "Rain",
+    subtitle: "Products and Patents",
+    position: { left: "52%", top: "42%", width: "16%", height: "18%" },
+    color: "bg-blue-400",
+  },
+  {
+    id: "ocean",
+    label: "Ocean",
+    subtitle: "Collaborations/Various Enablers",
+    position: { left: "12%", top: "76%", width: "28%", height: "14%" },
+    color: "bg-blue-600",
+  },
+  {
+    id: "groundwater",
+    label: "Ground Water",
+    subtitle: "Enhancements of Current Products",
+    position: { left: "58%", top: "78%", width: "22%", height: "14%" },
+    color: "bg-green-600",
+  },
+]
+
 interface Hotspot {
   id: string
   x: string
@@ -293,7 +346,15 @@ function FloorMapButton({ onClick }: { onClick: () => void }) {
   )
 }
 
-function FloorMapOverlay({ onClose, onSunClick }: { onClose: () => void; onSunClick: () => void }) {
+function FloorMapOverlay({ 
+  onClose, 
+  onSunClick, 
+  onAreaClick 
+}: { 
+  onClose: () => void; 
+  onSunClick: () => void;
+  onAreaClick: (area: FloorMapArea) => void;
+}) {
   return (
     <div className="absolute inset-0 bg-black flex items-center justify-center z-50 animate-in fade-in duration-300">
       {/* Back Button */}
@@ -343,6 +404,71 @@ function FloorMapOverlay({ onClose, onSunClick }: { onClose: () => void; onSunCl
             </span>
           </div>
         </div>
+
+        {/* Other Clickable Areas */}
+        {floorMapAreas.map((area) => (
+          <FloorMapHotspot 
+            key={area.id} 
+            area={area} 
+            onClick={() => onAreaClick(area)} 
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function TextPopup({ area, onClose }: { area: FloorMapArea; onClose: () => void }) {
+  return (
+    <div 
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[70] animate-in fade-in duration-200"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white/95 backdrop-blur-md px-10 py-8 rounded-2xl border border-white/30 shadow-2xl max-w-md mx-4 animate-in zoom-in-95 duration-300"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">{area.label}</h2>
+        <p className="text-lg text-gray-700">{area.subtitle}</p>
+        <button
+          onClick={onClose}
+          className="mt-6 w-full px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-gray-800 transition-all"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function FloorMapHotspot({ area, onClick }: { area: FloorMapArea; onClick: () => void }) {
+  return (
+    <div
+      onClick={onClick}
+      className="absolute cursor-pointer group"
+      style={{
+        left: area.position.left,
+        top: area.position.top,
+        width: area.position.width,
+        height: area.position.height,
+      }}
+    >
+      {/* Hover effect */}
+      <div className={`w-full h-full rounded-lg transition-all duration-300 group-hover:${area.color}/30 group-hover:border-2 group-hover:border-white group-hover:shadow-lg`} />
+      
+      {/* Pulsing indicator */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+        <div className="relative">
+          <div className="w-3 h-3 bg-white rounded-full animate-ping absolute inset-0 opacity-75" />
+          <div className="w-3 h-3 bg-white rounded-full relative z-10 shadow-lg" />
+        </div>
+      </div>
+      
+      {/* Tooltip */}
+      <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        <span className="bg-black/80 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg shadow-lg border border-white/20 text-xs font-medium whitespace-nowrap">
+          Click to view
+        </span>
       </div>
     </div>
   )
@@ -382,6 +508,7 @@ export function Office3DScene() {
   const [showSuccess, setShowSuccess] = useState(false)
   const [showFloorMap, setShowFloorMap] = useState(false)
   const [showPDF, setShowPDF] = useState(false)
+  const [activePopup, setActivePopup] = useState<FloorMapArea | null>(null)
 
   const scene = scenes[currentScene]
 
@@ -476,7 +603,13 @@ export function Office3DScene() {
         <FloorMapOverlay 
           onClose={() => setShowFloorMap(false)} 
           onSunClick={() => setShowPDF(true)}
+          onAreaClick={(area) => setActivePopup(area)}
         />
+      )}
+
+      {/* Text Popup for Floor Map Areas */}
+      {activePopup && (
+        <TextPopup area={activePopup} onClose={() => setActivePopup(null)} />
       )}
 
       {/* PDF Viewer */}
