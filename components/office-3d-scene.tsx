@@ -492,9 +492,10 @@ function PDFViewer({ onClose }: { onClose: () => void }) {
       {/* PDF Container */}
       <div className="flex-1 w-full">
         <iframe
-          src="https://blobs.vusercontent.net/blob/MetaClaw-cQiycbgP2SVvOaXYlJgvQ6ltt9Ovz1.pdf"
+          src={`https://docs.google.com/viewer?url=${encodeURIComponent("https://blobs.vusercontent.net/blob/MetaClaw-cQiycbgP2SVvOaXYlJgvQ6ltt9Ovz1.pdf")}&embedded=true`}
           className="w-full h-full"
           title="MetaClaw PDF"
+          allow="autoplay"
         />
       </div>
     </div>
