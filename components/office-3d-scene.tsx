@@ -474,17 +474,18 @@ function FloorMapHotspot({ area, onClick }: { area: FloorMapArea; onClick: () =>
   )
 }
 
-function PDFViewer({ onStartOver }: { onStartOver: () => void }) {
+function PDFViewer({ onClose }: { onClose: () => void }) {
   return (
     <div className="absolute inset-0 bg-black/95 flex flex-col z-[60] animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-black/50 border-b border-white/10">
         <h2 className="text-xl font-bold text-white">MetaClaw</h2>
         <button
-          onClick={onStartOver}
-          className="flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-full font-medium hover:bg-primary/90 transition-all hover:scale-105 shadow-lg"
+          onClick={onClose}
+          className="flex items-center justify-center w-9 h-9 bg-white/10 hover:bg-white/20 text-white rounded-full font-medium transition-all hover:scale-105 shadow-lg border border-white/20 text-lg leading-none"
+          aria-label="Close"
         >
-          Start Over
+          ×
         </button>
       </div>
       
@@ -602,7 +603,14 @@ export function Office3DScene() {
       {/* Floor Map Overlay */}
       {showFloorMap && !showPDF && (
         <FloorMapOverlay 
-          onClose={() => setShowFloorMap(false)} 
+          onClose={() => {
+            setShowFloorMap(false)
+            setIsTransitioning(true)
+            setTimeout(() => {
+              setCurrentScene("lobby")
+              setIsTransitioning(false)
+            }, 300)
+          }}
           onSunClick={() => {
             setShowFloorMap(false)
             setIsTransitioning(true)
@@ -623,14 +631,7 @@ export function Office3DScene() {
       {/* PDF Viewer */}
       {showPDF && (
         <PDFViewer 
-          onStartOver={() => {
-            setShowPDF(false)
-            setIsTransitioning(true)
-            setTimeout(() => {
-              setCurrentScene("entrance")
-              setIsTransitioning(false)
-            }, 300)
-          }} 
+          onClose={() => setShowPDF(false)} 
         />
       )}
 
