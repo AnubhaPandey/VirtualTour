@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Map } from "lucide-react"
 
 type Scene = "entrance" | "lobby" | "meetingRoom"
 
@@ -281,11 +281,54 @@ function BackButton({ onClick }: { onClick: () => void }) {
   )
 }
 
+function FloorMapButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="absolute top-24 right-8 z-20 flex flex-col items-center gap-2 bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-xl font-medium hover:bg-black/80 transition-all hover:scale-105 shadow-lg border border-white/20"
+    >
+      <Map className="w-8 h-8" />
+      <span className="text-xs">Floor Map</span>
+    </button>
+  )
+}
+
+function FloorMapOverlay({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center z-50 animate-in fade-in duration-300">
+      <div className="relative w-full h-full flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 bg-black/50">
+          <h2 className="text-2xl font-bold text-white">AI Garage Showcase - Floor Map</h2>
+          <button
+            onClick={onClose}
+            className="flex items-center gap-2 bg-card/90 backdrop-blur-sm text-card-foreground px-5 py-3 rounded-full font-medium hover:bg-card transition-all hover:scale-105 shadow-lg border border-border"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Lobby
+          </button>
+        </div>
+        
+        {/* Image Container */}
+        <div className="flex-1 flex items-center justify-center p-4">
+          <img
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Watercycle-2mUCL1ASCy0vmhMIRaAtk5fxuLtHwM.jpg"
+            alt="AI Garage Showcase - Water Cycle Floor Map"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            crossOrigin="anonymous"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function Office3DScene() {
   const [currentScene, setCurrentScene] = useState<Scene>("entrance")
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [showFloorMap, setShowFloorMap] = useState(false)
 
   const scene = scenes[currentScene]
 
@@ -369,6 +412,14 @@ export function Office3DScene() {
 
       {/* Info Box at Lobby */}
       {currentScene === "lobby" && <LobbyInfoBox />}
+
+      {/* Floor Map Button in Lobby */}
+      {currentScene === "lobby" && !showFloorMap && (
+        <FloorMapButton onClick={() => setShowFloorMap(true)} />
+      )}
+
+      {/* Floor Map Overlay */}
+      {showFloorMap && <FloorMapOverlay onClose={() => setShowFloorMap(false)} />}
 
       {/* Back Button in Meeting Room */}
       {currentScene === "meetingRoom" && !showSuccess && (
