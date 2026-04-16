@@ -417,49 +417,8 @@ function FloorMapOverlay({
     </div>
   )
 }
-  return (
-    <div className="absolute inset-0 bg-black flex items-center justify-center z-50 animate-in fade-in duration-300">
-      {/* Back Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-6 left-6 z-10 flex items-center gap-2 bg-black/70 backdrop-blur-sm text-white px-5 py-3 rounded-full font-medium hover:bg-black/80 transition-all hover:scale-105 shadow-lg border border-white/20"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Lobby
-      </button>
-      
-      {/* Full Page Image Container */}
-      <div className="relative w-full h-full">
-        <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Watercycle-2mUCL1ASCy0vmhMIRaAtk5fxuLtHwM.jpg"
-          alt="AI Garage Showcase - Water Cycle Floor Map"
-          className="w-full h-full object-cover"
-          crossOrigin="anonymous"
-        />
-        
-        {/* Clickable Sun Area - positioned over the Sun in the image */}
-        <div
-          onClick={onSunClick}
-          className="absolute cursor-pointer group"
-          style={{
-            left: "3%",
-            top: "12%",
-            width: "18%",
-            height: "28%",
-          }}
-        >
-          {/* Hover effect */}
-          <div className="w-full h-full rounded-full transition-all duration-300 group-hover:bg-yellow-400/20 group-hover:border-2 group-hover:border-yellow-400 group-hover:shadow-lg group-hover:shadow-yellow-400/30" />
-          
-          {/* Pulsing indicator */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-            <div className="relative">
-              <div className="w-4 h-4 bg-yellow-400 rounded-full animate-ping absolute inset-0 opacity-75" />
-              <div className="w-4 h-4 bg-yellow-400 rounded-full relative z-10" />
-            </div>
-          </div>
-          
-          function TextPopup({ area, onClose }: { area: FloorMapArea; onClose: () => void }) {
+
+function TextPopup({ area, onClose }: { area: FloorMapArea; onClose: () => void }) {
   return (
     <div 
       className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[70] animate-in fade-in duration-200"
