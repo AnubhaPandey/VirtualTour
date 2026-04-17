@@ -636,6 +636,17 @@ export function Office3DScene() {
       {/* Welcome Banner at Entrance */}
       {currentScene === "entrance" && <WelcomeBanner />}
 
+      {/* GIF Mascot at Entrance */}
+      {currentScene === "entrance" && (
+        <div className="absolute bottom-6 right-6 z-20 pointer-events-none">
+          <img
+            src="https://fcit.usf.edu/matrix/wp-content/uploads/2017/01/DanceBot-3-Sm.gif"
+            alt="Dancing robot"
+            className="h-48 w-auto drop-shadow-2xl"
+          />
+        </div>
+      )}
+
       {/* Info Box at Lobby */}
       {currentScene === "lobby" && <LobbyInfoBox />}
 

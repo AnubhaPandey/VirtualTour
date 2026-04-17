@@ -1057,14 +1057,30 @@ function Office3DScene() {
                 lineNumber: 637,
                 columnNumber: 39
             }, this),
+            currentScene === "entrance" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute bottom-6 right-6 z-20 pointer-events-none",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                    src: "https://fcit.usf.edu/matrix/wp-content/uploads/2017/01/DanceBot-3-Sm.gif",
+                    alt: "Dancing robot",
+                    className: "h-48 w-auto drop-shadow-2xl"
+                }, void 0, false, {
+                    fileName: "[project]/components/office-3d-scene.tsx",
+                    lineNumber: 642,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/office-3d-scene.tsx",
+                lineNumber: 641,
+                columnNumber: 9
+            }, this),
             currentScene === "lobby" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LobbyInfoBox, {}, void 0, false, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 640,
+                lineNumber: 651,
                 columnNumber: 36
             }, this),
             currentScene === "lobby" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LobbyMascot, {}, void 0, false, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 643,
+                lineNumber: 654,
                 columnNumber: 36
             }, this),
             (currentScene === "lobby" || currentScene === "meetingRoom") && !showFloorMap && !showPDF && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1074,20 +1090,20 @@ function Office3DScene() {
                         onClick: ()=>setShowFloorMap(true)
                     }, void 0, false, {
                         fileName: "[project]/components/office-3d-scene.tsx",
-                        lineNumber: 648,
+                        lineNumber: 659,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StartOverButton, {
                         onClick: handleGoToEntrance
                     }, void 0, false, {
                         fileName: "[project]/components/office-3d-scene.tsx",
-                        lineNumber: 649,
+                        lineNumber: 660,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 647,
+                lineNumber: 658,
                 columnNumber: 9
             }, this),
             showFloorMap && !showPDF && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FloorMapOverlay, {
@@ -1111,7 +1127,7 @@ function Office3DScene() {
                 onAreaClick: (area)=>setActivePopup(area)
             }, void 0, false, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 655,
+                lineNumber: 666,
                 columnNumber: 9
             }, this),
             activePopup && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(TextPopup, {
@@ -1119,35 +1135,35 @@ function Office3DScene() {
                 onClose: ()=>setActivePopup(null)
             }, void 0, false, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 679,
+                lineNumber: 690,
                 columnNumber: 9
             }, this),
             showPDF && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PDFViewer, {
                 onClose: ()=>setShowPDF(false)
             }, void 0, false, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 684,
+                lineNumber: 695,
                 columnNumber: 9
             }, this),
             currentScene === "meetingRoom" && !showSuccess && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BackButton, {
                 onClick: handleBackToLobby
             }, void 0, false, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 691,
+                lineNumber: 702,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SceneTransition, {
                 isTransitioning: isTransitioning
             }, void 0, false, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 695,
+                lineNumber: 706,
                 columnNumber: 7
             }, this),
             showSuccess && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$0_react$2d$dom$40$19$2e$2$2e$4_react$40$19$2e$2$2e$4_$5f$react$40$19$2e$2$2e$4$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SuccessOverlay, {
                 onReset: handleReset
             }, void 0, false, {
                 fileName: "[project]/components/office-3d-scene.tsx",
-                lineNumber: 698,
+                lineNumber: 709,
                 columnNumber: 23
             }, this)
         ]
