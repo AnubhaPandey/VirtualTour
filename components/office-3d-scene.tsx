@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
-import { ArrowLeft, Map, RotateCcw, Volume2, VolumeX, FastForward, Play, Pause } from "lucide-react"
+import { ArrowLeft, Map, RotateCcw, Volume2, VolumeX, FastForward, Play, Pause, Info } from "lucide-react"
 
 type Scene = "entrance" | "intro" | "lobby" | "meetingRoom"
 
@@ -541,7 +541,7 @@ function formatTime(secs: number) {
   return `${m}:${s.toString().padStart(2, "0")}`
 }
 
-function IntroScreen({ onBegin, onStartOver }: { onBegin: () => void; onStartOver: () => void }) {
+function IntroScreen({ onBegin, onStartOver, onClose }: { onBegin: () => void; onStartOver: () => void; onClose?: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [isMuted, setIsMuted] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -602,8 +602,17 @@ function IntroScreen({ onBegin, onStartOver }: { onBegin: () => void; onStartOve
         onLoadedMetadata={() => setDuration(audioRef.current?.duration ?? 0)}
       />
 
-      {/* Start Over - top right */}
-      <div className="absolute top-6 right-6 z-10">
+      {/* Top-right controls */}
+      <div className="absolute top-6 right-6 z-10 flex items-center gap-2">
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="flex items-center justify-center w-9 h-9 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all hover:scale-105 shadow-lg border border-white/20 text-lg leading-none"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        )}
         <StartOverButton onClick={onStartOver} />
       </div>
 
@@ -685,6 +694,7 @@ export function Office3DScene() {
   const [showSuccess, setShowSuccess] = useState(false)
   const [showFloorMap, setShowFloorMap] = useState(false)
   const [showPDF, setShowPDF] = useState(false)
+  const [showIntroPopup, setShowIntroPopup] = useState(false)
   const [activePopup, setActivePopup] = useState<FloorMapArea | null>(null)
 
   const scene = currentScene !== "intro" ? scenes[currentScene as Exclude<Scene, "intro">] : null
@@ -728,6 +738,7 @@ export function Office3DScene() {
   const handleGoToEntrance = () => {
     setShowFloorMap(false)
     setShowPDF(false)
+    setShowIntroPopup(false)
     setIsTransitioning(true)
     setTimeout(() => {
       setCurrentScene("entrance")
@@ -811,12 +822,30 @@ export function Office3DScene() {
       {/* Mascot in Lobby */}
       {currentScene === "lobby" && <LobbyMascot />}
 
-      {/* Floor Map + Start Over Buttons in Lobby and Meeting Room */}
+      {/* Floor Map + Intro + Start Over Buttons in Lobby and Meeting Room */}
       {(currentScene === "lobby" || currentScene === "meetingRoom") && !showFloorMap && !showPDF && (
         <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
+          {currentScene === "lobby" && (
+            <button
+              onClick={() => setShowIntroPopup(true)}
+              className="flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
+            >
+              <Info className="w-4 h-4" />
+              Intro
+            </button>
+          )}
           <FloorMapButton onClick={() => setShowFloorMap(true)} />
           <StartOverButton onClick={handleGoToEntrance} />
         </div>
+      )}
+
+      {/* Intro Popup from Lobby */}
+      {showIntroPopup && (
+        <IntroScreen
+          onBegin={() => setShowIntroPopup(false)}
+          onStartOver={handleGoToEntrance}
+          onClose={() => setShowIntroPopup(false)}
+        />
       )}
 
       {/* Floor Map Overlay */}
