@@ -310,6 +310,21 @@ function WelcomeBanner() {
   )
 }
 
+function LobbyMascot() {
+  return (
+    <div className="absolute bottom-6 right-6 z-20 pointer-events-none">
+      <video
+        src="/mascot.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="h-48 w-auto drop-shadow-2xl"
+      />
+    </div>
+  )
+}
+
 function LobbyInfoBox() {
   return (
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 w-full max-w-3xl px-4">
@@ -623,6 +638,9 @@ export function Office3DScene() {
 
       {/* Info Box at Lobby */}
       {currentScene === "lobby" && <LobbyInfoBox />}
+
+      {/* Mascot in Lobby */}
+      {currentScene === "lobby" && <LobbyMascot />}
 
       {/* Floor Map + Start Over Buttons in Lobby and Meeting Room */}
       {(currentScene === "lobby" || currentScene === "meetingRoom") && !showFloorMap && !showPDF && (
