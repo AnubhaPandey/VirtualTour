@@ -1377,6 +1377,10 @@
     bottom: calc(var(--spacing) * 8);
   }
 
+  .bottom-10 {
+    bottom: calc(var(--spacing) * 10);
+  }
+
   .-left-12 {
     left: calc(var(--spacing) * -12);
   }
@@ -3759,6 +3763,10 @@
 
   .border-input {
     border-color: var(--input);
+  }
+
+  .border-orange-400 {
+    border-color: var(--color-orange-400);
   }
 
   .border-primary {
@@ -7102,6 +7110,12 @@
       .hover\:bg-muted\/50:hover {
         background-color: color-mix(in oklab, var(--muted) 50%, transparent);
       }
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-orange-600:hover {
+      background-color: var(--color-orange-600);
     }
   }
 

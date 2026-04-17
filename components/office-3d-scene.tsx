@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 import { ArrowLeft, Map, RotateCcw } from "lucide-react"
 
-type Scene = "entrance" | "lobby" | "meetingRoom"
+type Scene = "entrance" | "intro" | "lobby" | "meetingRoom"
 
 type FloorMapArea = {
   id: string
@@ -85,7 +85,7 @@ const scenes: Record<Scene, {
         height: "50%",
       },
     ],
-    nextScene: "lobby",
+    nextScene: "intro",
   },
   lobby: {
     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Lobby-5DuGkfVTNKVAt7J0UNPXp3g10sVqaJ.png",
@@ -127,6 +127,7 @@ const scenes: Record<Scene, {
 
 const sceneLabels: Record<Scene, string> = {
   entrance: "Entrance Gate",
+  intro: "AI Garage Showcase",
   lobby: "Office Lobby",
   meetingRoom: "Meeting Room",
 }
@@ -533,6 +534,46 @@ function PDFViewer({ onClose }: { onClose: () => void }) {
   )
 }
 
+function IntroScreen({ onBegin, onStartOver }: { onBegin: () => void; onStartOver: () => void }) {
+  const audioRef = useRef<HTMLAudioElement>(null)
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+    audio.play().catch(() => {})
+    return () => { audio.pause() }
+  }, [])
+
+  return (
+    <div className="absolute inset-0 z-50 animate-in fade-in duration-500">
+      {/* Background image */}
+      <img
+        src="/intro-bg.png"
+        alt="AI Garage Showcase"
+        className="w-full h-full object-cover"
+      />
+
+      {/* Voiceover */}
+      <audio ref={audioRef} src="/intro-voiceover.wav" />
+
+      {/* Start Over - top right */}
+      <div className="absolute top-6 right-6 z-10">
+        <StartOverButton onClick={onStartOver} />
+      </div>
+
+      {/* Begin button - bottom center */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
+        <button
+          onClick={onBegin}
+          className="px-10 py-4 bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold rounded-full shadow-2xl transition-all hover:scale-105 border border-orange-400"
+        >
+          Begin with the Floor
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export function Office3DScene() {
   const [currentScene, setCurrentScene] = useState<Scene>("entrance")
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null)
@@ -542,7 +583,7 @@ export function Office3DScene() {
   const [showPDF, setShowPDF] = useState(false)
   const [activePopup, setActivePopup] = useState<FloorMapArea | null>(null)
 
-  const scene = scenes[currentScene]
+  const scene = currentScene !== "intro" ? scenes[currentScene as Exclude<Scene, "intro">] : null
 
   const handleHotspotClick = (hotspotId: string) => {
     if (isTransitioning) return
@@ -554,7 +595,7 @@ export function Office3DScene() {
     }
 
     // Navigate to next scene
-    if (scene.nextScene) {
+    if (scene?.nextScene) {
       setIsTransitioning(true)
       setTimeout(() => {
         setCurrentScene(scene.nextScene!)
@@ -608,27 +649,43 @@ export function Office3DScene() {
       </div>
 
       {/* Main Scene Image */}
-      <div className="absolute inset-0">
-        <img
-          src={scene.image}
-          alt={sceneLabels[currentScene]}
-          className="w-full h-full object-cover"
-          crossOrigin="anonymous"
-        />
-
-        {/* Hotspots */}
-        {scene.hotspots.map((hotspot) => (
-          <Hotspot
-            key={hotspot.id}
-            hotspot={hotspot}
-            onClick={() => handleHotspotClick(hotspot.id)}
-            isHovered={hoveredHotspot === hotspot.id}
-            onHover={(hovered) =>
-              setHoveredHotspot(hovered ? hotspot.id : null)
-            }
+      {scene && (
+        <div className="absolute inset-0">
+          <img
+            src={scene.image}
+            alt={sceneLabels[currentScene]}
+            className="w-full h-full object-cover"
+            crossOrigin="anonymous"
           />
-        ))}
-      </div>
+
+          {/* Hotspots */}
+          {scene.hotspots.map((hotspot) => (
+            <Hotspot
+              key={hotspot.id}
+              hotspot={hotspot}
+              onClick={() => handleHotspotClick(hotspot.id)}
+              isHovered={hoveredHotspot === hotspot.id}
+              onHover={(hovered) =>
+                setHoveredHotspot(hovered ? hotspot.id : null)
+              }
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Intro Screen */}
+      {currentScene === "intro" && (
+        <IntroScreen
+          onBegin={() => {
+            setIsTransitioning(true)
+            setTimeout(() => {
+              setCurrentScene("lobby")
+              setIsTransitioning(false)
+            }, 300)
+          }}
+          onStartOver={handleGoToEntrance}
+        />
+      )}
 
       {/* Welcome Banner at Entrance */}
       {currentScene === "entrance" && <WelcomeBanner />}
