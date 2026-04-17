@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
-import { ArrowLeft, Map, RotateCcw } from "lucide-react"
+import { ArrowLeft, Map, RotateCcw, Volume2, VolumeX, FastForward } from "lucide-react"
 
 type Scene = "entrance" | "intro" | "lobby" | "meetingRoom"
 
@@ -534,8 +534,18 @@ function PDFViewer({ onClose }: { onClose: () => void }) {
   )
 }
 
+function formatTime(secs: number) {
+  if (!isFinite(secs)) return "0:00"
+  const m = Math.floor(secs / 60)
+  const s = Math.floor(secs % 60)
+  return `${m}:${s.toString().padStart(2, "0")}`
+}
+
 function IntroScreen({ onBegin, onStartOver }: { onBegin: () => void; onStartOver: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null)
+  const [isMuted, setIsMuted] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
 
   useEffect(() => {
     const audio = audioRef.current
@@ -543,6 +553,25 @@ function IntroScreen({ onBegin, onStartOver }: { onBegin: () => void; onStartOve
     audio.play().catch(() => {})
     return () => { audio.pause() }
   }, [])
+
+  const handleMute = () => {
+    const audio = audioRef.current
+    if (!audio) return
+    audio.muted = !audio.muted
+    setIsMuted(audio.muted)
+  }
+
+  const handleFastForward = () => {
+    const audio = audioRef.current
+    if (!audio) return
+    audio.currentTime = Math.min(audio.currentTime + 15, audio.duration || 0)
+  }
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const audio = audioRef.current
+    if (!audio) return
+    audio.currentTime = Number(e.target.value)
+  }
 
   return (
     <div className="absolute inset-0 z-50 animate-in fade-in duration-500">
@@ -554,21 +583,77 @@ function IntroScreen({ onBegin, onStartOver }: { onBegin: () => void; onStartOve
       />
 
       {/* Voiceover */}
-      <audio ref={audioRef} src="/intro-voiceover.wav" />
+      <audio
+        ref={audioRef}
+        src="/intro-voiceover.wav"
+        onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime ?? 0)}
+        onLoadedMetadata={() => setDuration(audioRef.current?.duration ?? 0)}
+      />
 
       {/* Start Over - top right */}
       <div className="absolute top-6 right-6 z-10">
         <StartOverButton onClick={onStartOver} />
       </div>
 
-      {/* Begin button - bottom center */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
-        <button
-          onClick={onBegin}
-          className="px-10 py-4 bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold rounded-full shadow-2xl transition-all hover:scale-105 border border-orange-400"
-        >
-          Begin with the Floor
-        </button>
+      {/* Audio controls bar - bottom */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-6 pt-4 bg-gradient-to-t from-black/80 to-transparent">
+        {/* Progress bar */}
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-white/70 text-xs font-mono w-10 text-right shrink-0">
+            {formatTime(currentTime)}
+          </span>
+          <div className="relative flex-1 group">
+            <input
+              type="range"
+              min={0}
+              max={duration || 0}
+              step={0.1}
+              value={currentTime}
+              onChange={handleSeek}
+              className="w-full h-1.5 rounded-full appearance-none cursor-pointer accent-orange-500 bg-white/20"
+              style={{
+                background: duration
+                  ? `linear-gradient(to right, #f97316 ${(currentTime / duration) * 100}%, rgba(255,255,255,0.2) ${(currentTime / duration) * 100}%)`
+                  : "rgba(255,255,255,0.2)",
+              }}
+            />
+          </div>
+          <span className="text-white/70 text-xs font-mono w-10 shrink-0">
+            {formatTime(duration)}
+          </span>
+        </div>
+
+        {/* Controls row */}
+        <div className="flex items-center justify-between">
+          {/* Left: mute + fast-forward */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleMute}
+              className="flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
+            >
+              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              {isMuted ? "Unmute" : "Mute"}
+            </button>
+            <button
+              onClick={handleFastForward}
+              className="flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
+            >
+              <FastForward className="w-4 h-4" />
+              +15s
+            </button>
+          </div>
+
+          {/* Center: Begin button */}
+          <button
+            onClick={onBegin}
+            className="px-10 py-3 bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold rounded-full shadow-2xl transition-all hover:scale-105 border border-orange-400"
+          >
+            Begin with the Floor
+          </button>
+
+          {/* Right: spacer to balance layout */}
+          <div className="w-44" />
+        </div>
       </div>
     </div>
   )
