@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
-import { ArrowLeft, Map, RotateCcw, Volume2, VolumeX, FastForward } from "lucide-react"
+import { ArrowLeft, Map, RotateCcw, Volume2, VolumeX, FastForward, Play, Pause } from "lucide-react"
 
 type Scene = "entrance" | "intro" | "lobby" | "meetingRoom"
 
@@ -544,15 +544,27 @@ function formatTime(secs: number) {
 function IntroScreen({ onBegin, onStartOver }: { onBegin: () => void; onStartOver: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [isMuted, setIsMuted] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
 
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
-    audio.play().catch(() => {})
+    audio.play().then(() => setIsPlaying(true)).catch(() => {})
     return () => { audio.pause() }
   }, [])
+
+  const handlePlayPause = () => {
+    const audio = audioRef.current
+    if (!audio) return
+    if (audio.paused) {
+      audio.play().then(() => setIsPlaying(true)).catch(() => {})
+    } else {
+      audio.pause()
+      setIsPlaying(false)
+    }
+  }
 
   const handleMute = () => {
     const audio = audioRef.current
@@ -625,8 +637,15 @@ function IntroScreen({ onBegin, onStartOver }: { onBegin: () => void; onStartOve
 
         {/* Controls row */}
         <div className="flex items-center justify-between">
-          {/* Left: mute + fast-forward */}
+          {/* Left: play/pause + mute + fast-forward */}
           <div className="flex items-center gap-2">
+            <button
+              onClick={handlePlayPause}
+              className="flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
+            >
+              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {isPlaying ? "Pause" : "Play"}
+            </button>
             <button
               onClick={handleMute}
               className="flex items-center gap-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all"
