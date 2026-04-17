@@ -313,12 +313,9 @@ function WelcomeBanner() {
 function LobbyMascot() {
   return (
     <div className="absolute bottom-6 right-6 z-20 pointer-events-none">
-      <video
-        src="/mascot.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
+      <img
+        src="https://fcit.usf.edu/matrix/wp-content/uploads/2017/01/DanceBot-3-Sm.gif"
+        alt="Dancing robot"
         className="h-48 w-auto drop-shadow-2xl"
       />
     </div>
